@@ -30,32 +30,29 @@ processResources {
     duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
 }
 
-tasks.register('sourceJar', Jar) {
-    dependsOn classes
-    from sourceSets.main.allSource
-}
-
-tasks.register('javadocJar', Jar) {
-    dependsOn javadoc
-    from javadoc.destinationDir
-}
-
-artifacts {
-    archives javadocJar, sourceJar
+publishing {
+    publications {
+        pluginPublication(MavenPublication) {
+            from components.java
+            groupId project.group
+            artifactId project.name
+            version project.version
+        }
+    }
 }
 
 gradlePlugin {
     website = 'https://github.com/esoco/gwt-gradle-plugin'
     vcsUrl = 'https://github.com/esoco/gwt-gradle-plugin.git'
     plugins {
-        gwtPlugin {
+        create("gwtPlugin") {
             id = 'de.esoco.gwt'
             implementationClass = 'de.esoco.gwt.gradle.GwtPlugin'
             displayName = 'Gradle GWT plugin'
             description = 'GWT Application Gradle Plugin'
             tags.set(['gwt', 'java'])
         }
-        gwtLibPlugin {
+        create("gwtLibPlugin") {
             id = 'de.esoco.gwt-lib'
             implementationClass = 'de.esoco.gwt.gradle.GwtLibPlugin'
             displayName = 'Gradle GWT lib plugin'

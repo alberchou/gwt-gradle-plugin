@@ -1,11 +1,7 @@
 GWT Gradle Plugin
 ===================
 
-[![Build Status](https://www.travis-ci.org/esoco/gwt-gradle-plugin.svg?branch=master)](https://www.travis-ci.org/esoco/gwt-gradle-plugin)
-&nbsp;&nbsp;&nbsp;
-[ ![Download](https://api.bintray.com/packages/esoco/esoco/gwt-gradle-plugin/images/download.svg) ](https://bintray.com/esoco/esoco/gwt-gradle-plugin/_latestVersion)
-&nbsp;&nbsp;&nbsp;
-[![Gitter chat](https://badges.gitter.im/gwt-gradle-plugin/gitter.png)](https://gitter.im/gwt-gradle-plugin/community)
+![build](https://github.com/github/esoco/gwt-gradle-plugin/actions/workflows/build.yml/badge.svg)
 
 Release notes
 -------------
@@ -55,7 +51,7 @@ abandoned [project by Steffen Schaefer](https://github.com/steffenschaefer/gwt-g
 ## Requirements ##
 
 * Java 7 or higher
-* Gradle 4 or higher (https://gradle.org)
+* Gradle 4 or higher (https://gradle.org) (Gradle >=7 starting with 1.2.0)
 
 ## Usage ##
 

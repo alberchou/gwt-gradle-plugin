@@ -1,25 +1,25 @@
 /**
  * This file is part of gwt-gradle-plugin.
- *
- * gwt-gradle-plugin is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser
- * General Public License as published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * gwt-gradle-plugin is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
- * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser
- * General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License along with gwt-gradle-plugin. If not,
- * see <http://www.gnu.org/licenses/>.
+ * <p>
+ * gwt-gradle-plugin is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * <p>
+ * gwt-gradle-plugin is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
+ * for more details.
+ * <p>
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with gwt-gradle-plugin. If not, see <http://www.gnu.org/licenses/>.
  */
 package de.esoco.gwt.gradle.command;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
-
 import de.esoco.gwt.gradle.GwtLibPlugin;
 import de.esoco.gwt.gradle.extension.JavaOption;
-
 import org.gradle.api.Action;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
@@ -31,32 +31,31 @@ import org.gradle.api.file.FileCollection;
 import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.plugins.JavaPluginConvention;
 import org.gradle.api.tasks.SourceSet;
-
 import org.gradle.process.ExecResult;
 import org.gradle.process.JavaExecSpec;
 
 import java.io.File;
-
 import java.nio.charset.Charset;
-
 import java.util.Collection;
 import java.util.List;
 
-
 public abstract class AbstractCommand {
 
-	private Project project;
+	private final List<String> javaArgs = Lists.newArrayList();
 
-	private String     mainClass;
-	private JavaOption javaOptions;
+	private final List<String> args = Lists.newArrayList();
 
-	private final List<String> javaArgs   = Lists.newArrayList();
-	private final List<String> args       = Lists.newArrayList();
 	private final List<String> classPaths = Lists.newArrayList();
+
+	private final Project project;
+
+	private final String mainClass;
+
+	private JavaOption javaOptions;
 
 	public AbstractCommand(Project project, String mainClass) {
 
-		this.project   = project;
+		this.project = project;
 		this.mainClass = mainClass;
 
 		javaArgs.add("-Dfile.encoding=" + Charset.defaultCharset().name());
@@ -147,13 +146,13 @@ public abstract class AbstractCommand {
 		}
 
 		if (javaOptions.isDebugJava()) {
-			StringBuilder sb = new StringBuilder();
 
-			sb.append("-agentlib:jdwp=server=y,transport=dt_socket,address=");
-			sb.append(javaOptions.getDebugPort());
-			sb.append(",suspend=");
-			sb.append(javaOptions.isDebugSuspend() ? "y" : "n");
-			addJavaArgs(sb.toString());
+			String sb =
+				"-agentlib:jdwp=server=y,transport=dt_socket,address=" + javaOptions.getDebugPort() + ",suspend=" + (
+					javaOptions.isDebugSuspend() ?
+					"y" :
+					"n");
+			addJavaArgs(sb);
 		}
 
 		for (String javaArg : javaOptions.getJavaArgs()) {
@@ -163,57 +162,57 @@ public abstract class AbstractCommand {
 
 	public void execute() {
 
-		ExecResult execResult =
-		    project.javaexec(new Action<JavaExecSpec>() {
+		ExecResult execResult = project.javaexec(new Action<JavaExecSpec>() {
 
-					@Override
-					public void execute(JavaExecSpec spec) {
+			@Override
+			public void execute(JavaExecSpec spec) {
 
-						FileCollection classpath = project.files(classPaths);
+				FileCollection classpath = project.files(classPaths);
 
-						spec.setMain(mainClass);
-						spec.setMinHeapSize(javaOptions.getMinHeapSize());
-						spec.setMaxHeapSize(javaOptions.getMaxHeapSize());
+				spec.getMainClass().set(mainClass);
+				spec.setMinHeapSize(javaOptions.getMinHeapSize());
+				spec.setMaxHeapSize(javaOptions.getMaxHeapSize());
 
-						if (javaOptions.isEnvClasspath()) {
-							spec.environment("CLASSPATH",
-							                 classpath.getAsPath());
-						} else {
-							spec.setClasspath(classpath);
-						}
+				if (javaOptions.isEnvClasspath()) {
+					spec.environment("CLASSPATH", classpath.getAsPath());
+				} else {
+					spec.setClasspath(classpath);
+				}
 
-						spec.jvmArgs(javaArgs);
-						spec.args(args);
+				spec.jvmArgs(javaArgs);
+				spec.args(args);
 
-						if (javaOptions.getExecutable() != null) {
-							spec.setExecutable(javaOptions.getExecutable());
-						}
-					}
-				});
+				if (javaOptions.getExecutable() != null) {
+					spec.setExecutable(javaOptions.getExecutable());
+				}
+			}
+		});
 		execResult.assertNormalExitValue().rethrowFailure();
 	}
 
 	protected Collection<File> getDependencySourceDirs(Project project) {
 
-		ConfigurationContainer configs     = project.getConfigurations();
-		Configuration          compileConf =
-		    configs.getByName(JavaPlugin.COMPILE_CLASSPATH_CONFIGURATION_NAME);
-		DependencySet          depSet      = compileConf.getAllDependencies();
+		ConfigurationContainer configs = project.getConfigurations();
+		Configuration compileConf =
+			configs.getByName(JavaPlugin.COMPILE_CLASSPATH_CONFIGURATION_NAME);
+		DependencySet depSet = compileConf.getAllDependencies();
 
 		List<File> result = Lists.newArrayList();
 
 		for (Dependency dep : depSet) {
 			if (dep instanceof ProjectDependency) {
 				Project projectDependency =
-				    ((ProjectDependency) dep).getDependencyProject();
+					((ProjectDependency) dep).getDependencyProject();
 
-				if (projectDependency.getPlugins().hasPlugin(GwtLibPlugin.class)) {
-					JavaPluginConvention javaConvention =
-					    projectDependency.getConvention()
-					                     .getPlugin(JavaPluginConvention.class);
-					SourceSet            mainSourceSet  =
-					    javaConvention.getSourceSets()
-					                  .getByName(SourceSet.MAIN_SOURCE_SET_NAME);
+				if (projectDependency
+					.getPlugins()
+					.hasPlugin(GwtLibPlugin.class)) {
+					JavaPluginConvention javaConvention = projectDependency
+						.getConvention()
+						.getPlugin(JavaPluginConvention.class);
+					SourceSet mainSourceSet = javaConvention
+						.getSourceSets()
+						.getByName(SourceSet.MAIN_SOURCE_SET_NAME);
 
 					result.addAll(mainSourceSet.getAllSource().getSrcDirs());
 				}

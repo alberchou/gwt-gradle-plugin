@@ -1,7 +1,6 @@
 GWT Gradle Plugin
 ===================
-
-![build](https://github.com/github/esoco/gwt-gradle-plugin/actions/workflows/build.yml/badge.svg)
+[![](https://github.com/esoco/gwt-gradle-plugin/workflows/Java%20CI/badge.svg)](https://github.com/esoco/gwt-gradle-plugin/actions)
 
 Release notes
 -------------

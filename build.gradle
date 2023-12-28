@@ -1,44 +1,43 @@
-buildscript {
-    repositories {
-    	jcenter()
-		maven { url "https://plugins.gradle.org/m2/" }
-    }
-    dependencies {
-    	classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.+'
-		classpath "com.gradle.publish:plugin-publish-plugin:0.14.0"
-	}
+plugins {
+    id "java-library"
+    id "java-gradle-plugin"
+    id "com.gradle.plugin-publish" version "1.2.1"
+    id "pl.allegro.tech.build.axion-release" version "1.16.1"
+    id "com.vanniktech.maven.publish" version "0.26.0"
 }
 
-apply plugin: 'java'
-apply plugin: 'java-library'
-apply plugin: 'eclipse'
-apply plugin: 'java-gradle-plugin'
-apply plugin: 'com.gradle.plugin-publish';
-apply plugin: 'maven-publish'
-apply plugin: 'groovy'
+scmVersion { tag { prefix.set("") } }
 
-group = 'de.esoco.gwt'
+project.version = scmVersion.version
+project.group = 'de.esoco.gwt'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	compile gradleApi()
-	compile "com.google.guava:guava:23.5-jre"
-	testCompile 'org.spockframework:spock-core:1.3-groovy-2.5', gradleTestKit()
+    implementation gradleApi()
+    implementation "com.google.guava:guava:23.5-jre"
+    testImplementation 'org.spockframework:spock-core:1.3-groovy-2.5', gradleTestKit()
 }
 
-task javadocJar(type: Jar) {
-	classifier = 'javadoc'
-    from javadoc
+processResources {
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
 }
-task sourceJar(type: Jar) {
-	classifier = 'sources'
-	from sourceSets.main.allSource
+
+tasks.register('sourceJar', Jar) {
+    dependsOn classes
+    from sourceSets.main.allSource
+}
+
+tasks.register('javadocJar', Jar) {
+    dependsOn javadoc
+    from javadoc.destinationDir
 }
 
 artifacts {
@@ -46,65 +45,52 @@ artifacts {
 }
 
 gradlePlugin {
-	plugins {
-		gwtPlugin {
-			id = 'de.esoco.gwt'
-			implementationClass = 'de.esoco.gwt.gradle.GwtPlugin'
-		}
-		gwtLibPlugin {
-			id = 'de.esoco.gwt-lib'
-			implementationClass = 'de.esoco.gwt.gradle.GwtLibPlugin'
-		}
-
-	}
-}
-
-pluginBundle {
-	website = 'https://github.com/esoco/gwt-gradle-plugin'
-	vcsUrl = 'https://github.com/esoco/gwt-gradle-plugin.git'
-	description = 'GWT Gradle Plugin'
-	tags = ['gwt', 'java']
-
-	plugins {
-		gwtPlugin {
-			displayName = 'Gradle GWT plugin'
-		}
-		gwtLibPlugin {
-			displayName = 'Gradle GWT lib plugin'
-		}
-	}
-}
-
-publishing {
-    publications {
-        pluginPublication (MavenPublication) {
-            from    components.java
-            groupId    project.group
-            artifactId project.name
-            version    project.version
+    website = 'https://github.com/esoco/gwt-gradle-plugin'
+    vcsUrl = 'https://github.com/esoco/gwt-gradle-plugin.git'
+    plugins {
+        gwtPlugin {
+            id = 'de.esoco.gwt'
+            implementationClass = 'de.esoco.gwt.gradle.GwtPlugin'
+            displayName = 'Gradle GWT plugin'
+            description = 'GWT Application Gradle Plugin'
+            tags.set(['gwt', 'java'])
         }
+        gwtLibPlugin {
+            id = 'de.esoco.gwt-lib'
+            implementationClass = 'de.esoco.gwt.gradle.GwtLibPlugin'
+            displayName = 'Gradle GWT lib plugin'
+            description = 'GWT Library Gradle Plugin'
+            tags.set(['gwt', 'java'])
+        }
+
     }
 }
-// ----------- Bintray Release -----------
 
-apply plugin: 'com.jfrog.bintray'
-apply plugin: 'maven'
+mavenPublishing {
+    coordinates("$project.group", "$project.name", "$project.version")
 
-bintray {
-	user = project.hasProperty('bintrayUser') ?
-				project.property('bintrayUser') :
-				System.getenv('BINTRAY_USER')
-	key = project.hasProperty('bintrayApiKey') ?
-				project.property('bintrayApiKey') :
-				System.getenv('BINTRAY_API_KEY')
-    configurations = ['archives']
-    publish = true
-
-	pkg {
-		repo = 'esoco'
-		name = project.name
-		version {
-			name = project.version
-	    }
+    pom {
+        name = "$project.name"
+        description = "$project.description"
+        url = "https://github.com/esoco/${project.name}"
+        licenses {
+            license {
+                name = "LGPL-3.0 license"
+                url = "https://www.gnu.org/licenses/lgpl-3.0.html.en#license-text"
+                distribution = "https://www.gnu.org/licenses/lgpl-3.0.html.en"
+            }
+        }
+        developers {
+            developer {
+                id = "esoco"
+                name = "esoco GmbH"
+                url = "https://esoco.de/"
+            }
+        }
+        scm {
+            url = "https://github.com/esoco/${project.name}/"
+            connection = "scm:git:git://github.com/esoco/${project.name}.git"
+            developerConnection = "scm:git:ssh://git@github.com/esoco/${project.name}.git"
+        }
     }
 }

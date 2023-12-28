@@ -39,6 +39,7 @@ import org.gradle.api.tasks.PathSensitive;
 import org.gradle.api.tasks.PathSensitivity;
 import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.TaskAction;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.lang.management.ManagementFactory;
@@ -205,7 +206,7 @@ public class GwtCompileTask extends AbstractTask {
 				new Action<Project>() {
 
 					@Override
-					public void execute(Project project) {
+					public void execute(@NotNull Project project) {
 						addSourceSet(sources, project, allProjects,
 							SourceSet.MAIN_SOURCE_SET_NAME);
 					}

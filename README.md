@@ -63,7 +63,7 @@ your projects:
 
 ```groovy
 plugins {
-    id "de.esoco.gwt" version "1.1.0"
+    id "de.esoco.gwt" version "1.2.0"
 }
 ```
 
@@ -80,7 +80,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'de.esoco.gwt:gwt-gradle-plugin:1.+'
+        classpath 'de.esoco.gwt:gwt-gradle-plugin:1.2.0'
     }
 }
 apply plugin: 'de.esoco.gwt'
@@ -107,8 +107,6 @@ true if the Eclipse plugin is active):
 
 ```groovy
 apply plugin: 'eclipse'
-
-...
 
 gwt {
     module 'your.gwt.module.to.compile'

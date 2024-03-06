@@ -45,10 +45,7 @@ public class CodeServerCommand extends AbstractCommand {
 	                      Collection<String> modules) {
 
 		DevOption devOption = extension.getDev();
-
-		if (extension.getGwtVersion().startsWith("2.6")) {
-			addArg("-launcherDir", devOption.getLauncherDir());
-		}
+		addArg("-launcherDir", devOption.getLauncherDir());
 
 		ConfigurationContainer configs = project.getConfigurations();
 		Configuration          sdmConf =

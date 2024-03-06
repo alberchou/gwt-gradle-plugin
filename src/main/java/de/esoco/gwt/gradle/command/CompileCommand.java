@@ -50,7 +50,7 @@ public class CompileCommand extends AbstractCommand {
 		           .getByName(JavaPlugin.COMPILE_CLASSPATH_CONFIGURATION_NAME);
 
 		configureJavaArgs(compilerOptions);
-		addJavaArgs("-Dgwt.persistentunitcachedir=" + project.getBuildDir() +
+		addJavaArgs("-Dgwt.persistentunitcachedir=" + project.getLayout().getBuildDirectory().getAsFile().get() +
 		            "/" + GwtExtension.DIRECTORY + "/work/cache");
 
 		for (File sourceDir : sources) {

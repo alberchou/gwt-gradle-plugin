@@ -85,7 +85,7 @@ class GwtLibPlugin implements Plugin<Project> {
 		Test test = project.getTasks().withType(Test.class).getByName("test");
 		test.getSystemProperties()
 		    .put("gwt.persistentunitcachedir",
-		         project.getBuildDir() + GwtExtension.DIRECTORY + "/test");
+		         project.getLayout().getBuildDirectory().getAsFile().get() + GwtExtension.DIRECTORY + "/test");
 	}
 
 	private void includeSourcesToJar(Project project) {

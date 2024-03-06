@@ -91,7 +91,7 @@ public class GwtDevTask extends AbstractTask {
 		ResourceUtils.ensureDir(sdmOption.getWar());
 		ResourceUtils.ensureDir(sdmOption.getWorkDir());
 		jettyConf =
-		    new File(getProject().getBuildDir(),
+		    new File(getProject().getLayout().getBuildDirectory().getAsFile().get(),
 		             GwtExtension.DIRECTORY +
 		             "/conf/jetty-run-conf.xml");
 

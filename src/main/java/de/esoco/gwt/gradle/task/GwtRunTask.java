@@ -48,7 +48,7 @@ public class GwtRunTask extends AbstractTask {
 		War warTask = (War) getProject().getTasks().getByName("war");
 
 		jettyConf =
-		    new File(getProject().getBuildDir(), "gwt/conf/jetty-run-conf.xml");
+		    new File(getProject().getLayout().getBuildDirectory().getAsFile().get(), "gwt/conf/jetty-run-conf.xml");
 
 		Map<String, String> model =
 		    new ImmutableMap.Builder<String, String>().put("__WAR_FILE__",

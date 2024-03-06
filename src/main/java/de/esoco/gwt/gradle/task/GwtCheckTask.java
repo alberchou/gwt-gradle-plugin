@@ -87,7 +87,7 @@ public class GwtCheckTask extends AbstractTask {
 		                @Override
 		                public File call() {
 
-		                    return new File(getProject().getBuildDir(), "out");
+		                    return new File(getProject().getLayout().getBuildDirectory().getAsFile().get(), "out");
 		                }
 		            });
 		mapping.map("src", new Callable<FileCollection>() {

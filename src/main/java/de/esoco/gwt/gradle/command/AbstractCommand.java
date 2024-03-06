@@ -29,7 +29,7 @@ import org.gradle.api.artifacts.DependencySet;
 import org.gradle.api.artifacts.ProjectDependency;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.plugins.JavaPlugin;
-import org.gradle.api.plugins.JavaPluginConvention;
+import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.tasks.SourceSet;
 import org.gradle.process.ExecResult;
 import org.gradle.process.JavaExecSpec;
@@ -207,10 +207,10 @@ public abstract class AbstractCommand {
 				if (projectDependency
 					.getPlugins()
 					.hasPlugin(GwtLibPlugin.class)) {
-					JavaPluginConvention javaConvention = projectDependency
-						.getConvention()
-						.getPlugin(JavaPluginConvention.class);
-					SourceSet mainSourceSet = javaConvention
+					JavaPluginExtension javaPluginExtension = projectDependency
+						.getExtensions()
+						.getByType(JavaPluginExtension.class);
+					SourceSet mainSourceSet = javaPluginExtension
 						.getSourceSets()
 						.getByName(SourceSet.MAIN_SOURCE_SET_NAME);
 

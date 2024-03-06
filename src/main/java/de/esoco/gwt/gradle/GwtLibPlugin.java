@@ -23,7 +23,7 @@ import org.gradle.api.artifacts.ConfigurationContainer;
 import org.gradle.api.artifacts.dsl.DependencyHandler;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.plugins.JavaPlugin;
-import org.gradle.api.plugins.JavaPluginConvention;
+import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.publish.maven.plugins.MavenPublishPlugin;
 import org.gradle.api.plugins.WarPlugin;
 import org.gradle.api.tasks.SourceSet;
@@ -64,13 +64,13 @@ class GwtLibPlugin implements Plugin<Project> {
 	}
 
 	private void includeSourcesForTest(Project project) {
-		JavaPluginConvention javaConvention = project.getConvention()
-		                                             .getPlugin(JavaPluginConvention.class);
+		JavaPluginExtension javaPluginExtension = project.getExtensions()
+		                                                 .getByType(JavaPluginExtension.class);
 
-		SourceSet mainSourset = javaConvention.getSourceSets()
-		                                      .getByName(SourceSet.MAIN_SOURCE_SET_NAME);
-		SourceSet testSourset = javaConvention.getSourceSets()
-		                                      .getByName(SourceSet.TEST_SOURCE_SET_NAME);
+		SourceSet mainSourset = javaPluginExtension.getSourceSets()
+		                                           .getByName(SourceSet.MAIN_SOURCE_SET_NAME);
+		SourceSet testSourset = javaPluginExtension.getSourceSets()
+		                                           .getByName(SourceSet.TEST_SOURCE_SET_NAME);
 
 		FileCollection testClasspath = project.files(mainSourset.getAllSource()
 		                                             .getSrcDirs().toArray())
@@ -92,10 +92,10 @@ class GwtLibPlugin implements Plugin<Project> {
 		Jar                  jarTask        = project.getTasks()
 		                                             .withType(Jar.class)
 		                                             .getByName("jar");
-		JavaPluginConvention javaConvention = project.getConvention()
-		                                             .getPlugin(JavaPluginConvention.class);
-		SourceSet            mainSourset    = javaConvention.getSourceSets()
-		                                                    .getByName("main");
+		JavaPluginExtension javaPluginExtension = project.getExtensions()
+		                                                 .getByType(JavaPluginExtension.class);
+		SourceSet            mainSourset    = javaPluginExtension.getSourceSets()
+		                                                         .getByName("main");
 		jarTask.from(mainSourset.getAllSource());
 	}
 

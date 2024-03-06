@@ -23,7 +23,7 @@ import org.gradle.api.file.FileCollection;
 import org.gradle.api.internal.ConventionMapping;
 import org.gradle.api.internal.IConventionAware;
 import org.gradle.api.plugins.JavaPlugin;
-import org.gradle.api.plugins.JavaPluginConvention;
+import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.InputFiles;
 import org.gradle.api.tasks.OutputDirectory;
@@ -58,11 +58,11 @@ public class GwtCheckTask extends AbstractTask {
 
 		options.init(getProject());
 
-		JavaPluginConvention javaConvention =
-		    project.getConvention().getPlugin(JavaPluginConvention.class);
+		JavaPluginExtension javaPluginExtension =
+		    project.getExtensions().getByType(JavaPluginExtension.class);
 		SourceSet            mainSourceSet  =
-		    javaConvention.getSourceSets()
-		                  .getByName(SourceSet.MAIN_SOURCE_SET_NAME);
+		    javaPluginExtension.getSourceSets()
+		                       .getByName(SourceSet.MAIN_SOURCE_SET_NAME);
 		final FileCollection sources        =
 		    getProject().files(project.files(mainSourceSet.getOutput()
 		                                     .getResourcesDir()))

@@ -29,11 +29,11 @@ import org.gradle.api.Project;
 import org.gradle.api.internal.ConventionMapping;
 import org.gradle.api.internal.IConventionAware;
 import org.gradle.api.plugins.JavaPlugin;
-import org.gradle.api.plugins.JavaPluginConvention;
-import org.gradle.api.plugins.WarPluginConvention;
+import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.TaskAction;
+import org.gradle.api.tasks.bundling.War;
 
 import java.io.File;
 import java.io.IOException;
@@ -119,14 +119,18 @@ public class GwtDevTask extends AbstractTask {
 
 	private void createWarExploded(DevOption sdmOption) throws IOException {
 
-		WarPluginConvention  warConvention  =
-		    getProject().getConvention().getPlugin(WarPluginConvention.class);
-		JavaPluginConvention javaConvention =
-		    getProject().getConvention().getPlugin(JavaPluginConvention.class);
+		JavaPluginExtension javaPluginExtension =
+		    getProject().getExtensions().getByType(JavaPluginExtension.class);
 
 		File warDir = sdmOption.getWar();
 
-		ResourceUtils.copyDirectory(warConvention.getWebAppDir(), warDir);
+		War warTask = getProject().getTasks()
+				.withType(War.class)
+				.findByName("war");
+		if (warTask != null) {
+			File webAppDir = warTask.getWebAppDirectory().getAsFile().getOrNull();
+			ResourceUtils.copyDirectory(webAppDir, warDir);
+		}
 
 		if (Boolean.TRUE.equals(sdmOption.getNoServer())) {
 			File webInfDir =
@@ -135,7 +139,7 @@ public class GwtDevTask extends AbstractTask {
 			ResourceUtils.deleteDirectory(webInfDir);
 		} else {
 			SourceSet mainSourceSet =
-			    javaConvention.getSourceSets().getByName("main");
+			    javaPluginExtension.getSourceSets().getByName("main");
 			File      classesDir    =
 			    ResourceUtils.ensureDir(new File(warDir, "WEB-INF/classes"));
 

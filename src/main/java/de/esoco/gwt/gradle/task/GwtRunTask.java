@@ -53,7 +53,9 @@ public class GwtRunTask extends AbstractTask {
 		Map<String, String> model =
 		    new ImmutableMap.Builder<String, String>().put("__WAR_FILE__",
 		                                                   warTask
-		                                                   .getArchivePath()
+		                                                   .getArchiveFile()
+		                                                   .get()
+		                                                   .getAsFile()
 		                                                   .getAbsolutePath())
 		                                              .build();
 

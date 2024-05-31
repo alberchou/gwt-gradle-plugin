@@ -102,8 +102,8 @@ class GwtLibPlugin implements Plugin<Project> {
 	private void initDependencies(Project project, GwtExtension extension) {
 		String gwtVersion     = extension.getGwtVersion();
 		String jettyVersion   = extension.getJettyVersion();
-		String sGwtUser       = "com.google.gwt:gwt-user:" + gwtVersion;
-		String sGwtCodeserver = "com.google.gwt:gwt-codeserver:" +
+		String sGwtUser       = "org.gwtproject:gwt-user:" + gwtVersion;
+		String sGwtCodeserver = "org.gwtproject:gwt-codeserver:" +
 		                        gwtVersion;
 
 		DependencyHandler dependencies = project.getDependencies();
@@ -116,19 +116,19 @@ class GwtLibPlugin implements Plugin<Project> {
 
 		if (extension.isGwtElementalLib()) {
 			dependencies.add(JavaPlugin.IMPLEMENTATION_CONFIGURATION_NAME,
-			                 "com.google.gwt:gwt-elemental:" + gwtVersion);
+			                 "org.gwtproject:gwt-elemental:" + gwtVersion);
 		}
 
 		if (extension.isGwtServletLib()) {
 			dependencies.add(JavaPlugin.IMPLEMENTATION_CONFIGURATION_NAME,
-			                 "com.google.gwt:gwt-servlet:" + gwtVersion);
+			                 "org.gwtproject:gwt-servlet:" + gwtVersion);
 		}
 
 		if (project.getPlugins().hasPlugin(WarPlugin.class)) {
 			dependencies.add(WarPlugin.PROVIDED_COMPILE_CONFIGURATION_NAME,
-			                 "com.google.gwt:gwt-dev:" + gwtVersion);
+			                 "org.gwtproject:gwt-dev:" + gwtVersion);
 		}
-		
+
 		dependencies.add(CONF_JETTY,
 		                 "org.eclipse.jetty:jetty-runner:" + jettyVersion);
 

@@ -14,12 +14,11 @@
  */
 package de.esoco.gwt.gradle.extension;
 
-import com.google.common.collect.Lists;
-
 import org.gradle.api.Project;
 
 import java.io.File;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -150,7 +149,7 @@ public class CompilerOption extends JavaOption {
 	private List<String> excludeJsInteropExports;
 
 	/** GWT extra args, can be used to experiment arguments. */
-	private final List<String> extraArgs = Lists.newArrayList();
+	private final List<String> extraArgs = new ArrayList<>();
 
 	public Boolean getCheckAssertions() {
 

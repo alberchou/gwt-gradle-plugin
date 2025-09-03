@@ -15,12 +15,11 @@
 package de.esoco.gwt.gradle.extension;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.gradle.api.Project;
-
-import com.google.common.collect.Lists;
 
 public class DevOption extends JavaOption {
 
@@ -96,7 +95,7 @@ public class DevOption extends JavaOption {
 	/**
 	 * GWT extra args, can be used to experiment arguments.
 	 */
-	private final List<String> extraArgs = Lists.newArrayList();
+	private final List<String> extraArgs = new ArrayList<>();
 
 	public String getBindAddress() {
 		return bindAddress;

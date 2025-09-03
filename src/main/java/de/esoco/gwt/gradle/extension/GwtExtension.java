@@ -14,12 +14,11 @@
  */
 package de.esoco.gwt.gradle.extension;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.gradle.util.ConfigureUtil;
-
-import com.google.common.collect.Lists;
 
 import groovy.lang.Closure;
 
@@ -41,7 +40,7 @@ public class GwtExtension {
 	/**
 	 * GWT Module to compile.
 	 */
-	private final List<String> module = Lists.newArrayList();
+	private final List<String> module = new ArrayList<>();
 
 	private CompilerOption compile = new CompilerOption();
 	private DevOption dev = new DevOption();

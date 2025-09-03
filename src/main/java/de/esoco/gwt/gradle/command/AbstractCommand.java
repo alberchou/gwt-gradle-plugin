@@ -17,7 +17,6 @@
 package de.esoco.gwt.gradle.command;
 
 import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 import de.esoco.gwt.gradle.GwtLibPlugin;
 import de.esoco.gwt.gradle.extension.JavaOption;
 import org.gradle.api.Action;
@@ -36,16 +35,17 @@ import org.gradle.process.JavaExecSpec;
 
 import java.io.File;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public abstract class AbstractCommand {
 
-	private final List<String> javaArgs = Lists.newArrayList();
+	private final List<String> javaArgs = new ArrayList<>();
 
-	private final List<String> args = Lists.newArrayList();
+	private final List<String> args = new ArrayList<>();
 
-	private final List<String> classPaths = Lists.newArrayList();
+	private final List<String> classPaths = new ArrayList<>();
 
 	private final Project project;
 
@@ -197,7 +197,7 @@ public abstract class AbstractCommand {
 			configs.getByName(JavaPlugin.COMPILE_CLASSPATH_CONFIGURATION_NAME);
 		DependencySet depSet = compileConf.getAllDependencies();
 
-		List<File> result = Lists.newArrayList();
+		List<File> result = new ArrayList<>();
 
 		for (Dependency dep : depSet) {
 			if (dep instanceof ProjectDependency) {

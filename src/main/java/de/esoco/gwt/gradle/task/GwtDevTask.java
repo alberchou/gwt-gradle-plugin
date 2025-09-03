@@ -16,7 +16,6 @@ package de.esoco.gwt.gradle.task;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 
 import de.esoco.gwt.gradle.command.CodeServerCommand;
 import de.esoco.gwt.gradle.command.AbstractCommand;
@@ -38,6 +37,7 @@ import org.gradle.api.tasks.bundling.War;
 import java.io.File;
 import java.io.IOException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -49,7 +49,7 @@ public class GwtDevTask extends AbstractTask {
 
 	public static final String NAME = "gwtDev";
 
-	private final List<String> modules   = Lists.newArrayList();
+	private final List<String> modules   = new ArrayList<>();
 	private File               jettyConf;
 
 	public GwtDevTask() {

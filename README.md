@@ -5,6 +5,8 @@ GWT Gradle Plugin
 Release notes
 -------------
 
+* 2026/03/11: Compatibility with Gradle 9
+
 * 1.2.0: Compatibility with new Gradle versions
 	* Minimum Gradle version 7.x
 	* Gradle 8.5 build

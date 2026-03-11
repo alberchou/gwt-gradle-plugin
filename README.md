@@ -6,6 +6,29 @@ Release notes
 -------------
 
 * 2026/03/11: Compatibility with Gradle 9
+	* Unpublished version, to use this:
+ 		* Run the shadowJar task
+   		* Copy the gwt-gradle-plugin/build/libs/gwt-gradle-plugin-0.1.0-SNAPSHOT.jar into your repository/gradle/plugins/
+     	* Change your build.gradle from this:
+	        ```
+			plugins {
+			  id "de.esoco.gwt" version "1.2.0"
+			}
+			```
+	
+			to this:
+			```
+			buildscript {
+			  repositories {
+			    flatDir {
+			      dirs '../../gradle/plugins/'  // Gradle plugins directory
+			    }
+			  }
+			  dependencies {
+			    classpath files('../../gradle/plugins/gwt-gradle-plugin-0.1.0-SNAPSHOT.jar')  // GWT plugin
+			  }
+			}
+	  		```
 
 * 1.2.0: Compatibility with new Gradle versions
 	* Minimum Gradle version 7.x

@@ -50,7 +50,7 @@ import java.util.Set;
 import java.util.concurrent.Callable;
 
 @CacheableTask
-public class GwtCompileTask extends AbstractTask {
+public abstract class GwtCompileTask extends AbstractTask {
 
 	public static final String NAME = "gwtCompile";
 
@@ -126,8 +126,12 @@ public class GwtCompileTask extends AbstractTask {
 			compilerOptions.setSourceLevel(extension.getSourceLevel());
 		}
 
-		CompileCommand command =
-			new CompileCommand(project, compilerOptions, getSrc(), getWar(),
+		CompileCommand command = getObjects().newInstance(
+				CompileCommand.class,
+				project,
+				compilerOptions,
+				getSrc(),
+				getWar(),
 				getModules());
 
 		command.execute();
@@ -180,7 +184,7 @@ public class GwtCompileTask extends AbstractTask {
 					mainSourceSet.getCompileClasspathConfigurationName());
 			for (Dependency dep : config.getAllDependencies()) {
 				if (dep instanceof ProjectDependency) {
-					addSources(((ProjectDependency) dep).getDependencyProject(),
+					addSources(project.getRootProject().project(((ProjectDependency) dep).getPath()),
 						sources, allProjects);
 				}
 			}

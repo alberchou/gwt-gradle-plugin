@@ -17,8 +17,13 @@ package de.esoco.gwt.gradle.task;
 import de.esoco.gwt.gradle.extension.GwtExtension;
 
 import org.gradle.api.DefaultTask;
+import org.gradle.api.model.ObjectFactory;
+
+import javax.inject.Inject;
 
 public abstract class AbstractTask extends DefaultTask {
+	@Inject
+	public abstract ObjectFactory getObjects();
 
 	public AbstractTask() {
 		setGroup(GwtExtension.NAME);

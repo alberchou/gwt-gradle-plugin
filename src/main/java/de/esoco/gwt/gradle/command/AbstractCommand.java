@@ -30,6 +30,7 @@ import org.gradle.api.file.FileCollection;
 import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.tasks.SourceSet;
+import org.gradle.process.ExecOperations;
 import org.gradle.process.ExecResult;
 import org.gradle.process.JavaExecSpec;
 
@@ -53,10 +54,13 @@ public abstract class AbstractCommand {
 
 	private JavaOption javaOptions;
 
-	public AbstractCommand(Project project, String mainClass) {
+	private final ExecOperations execOperations;
+
+	public AbstractCommand(Project project, String mainClass, ExecOperations execOperations) {
 
 		this.project = project;
 		this.mainClass = mainClass;
+		this.execOperations = execOperations;
 
 		javaArgs.add("-Dfile.encoding=" + Charset.defaultCharset().name());
 	}
@@ -162,7 +166,7 @@ public abstract class AbstractCommand {
 
 	public void execute() {
 
-		ExecResult execResult = project.javaexec(new Action<JavaExecSpec>() {
+		ExecResult execResult = execOperations.javaexec(new Action<JavaExecSpec>() {
 
 			@Override
 			public void execute(JavaExecSpec spec) {
@@ -201,8 +205,7 @@ public abstract class AbstractCommand {
 
 		for (Dependency dep : depSet) {
 			if (dep instanceof ProjectDependency) {
-				Project projectDependency =
-					((ProjectDependency) dep).getDependencyProject();
+				Project projectDependency = project.getRootProject().project(((ProjectDependency) dep).getPath());
 
 				if (projectDependency
 					.getPlugins()

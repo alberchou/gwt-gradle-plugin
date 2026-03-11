@@ -25,7 +25,9 @@ import org.gradle.api.artifacts.ConfigurationContainer;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.tasks.SourceSet;
+import org.gradle.process.ExecOperations;
 
+import javax.inject.Inject;
 import java.io.File;
 
 import java.util.Collection;
@@ -33,10 +35,11 @@ import java.util.Collection;
 
 public class CodeServerCommand extends AbstractCommand {
 
+	@Inject
 	public CodeServerCommand(Project project, GwtExtension extension,
-	                         Collection<String> modules) {
+	                         Collection<String> modules, ExecOperations execOperations) {
 
-		super(project, "com.google.gwt.dev.codeserver.CodeServer");
+		super(project, "com.google.gwt.dev.codeserver.CodeServer", execOperations);
 
 		configure(project, extension, modules);
 	}

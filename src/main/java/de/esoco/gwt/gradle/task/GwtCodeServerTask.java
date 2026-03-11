@@ -27,7 +27,7 @@ import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.tasks.TaskAction;
 
 
-public class GwtCodeServerTask extends AbstractTask {
+public abstract class GwtCodeServerTask extends AbstractTask {
 
 	public static final String NAME = "gwtCodeServer";
 
@@ -60,9 +60,11 @@ public class GwtCodeServerTask extends AbstractTask {
 
 		ResourceUtils.ensureDir(extension.getDev().getLauncherDir());
 
-		AbstractCommand command =
-		    new CodeServerCommand(getProject(), extension,
-		                          extension.getModule());
+		AbstractCommand command = getObjects().newInstance(
+				CodeServerCommand.class,
+				getProject(),
+				extension,
+				extension.getModule());
 
 		command.execute();
 	}

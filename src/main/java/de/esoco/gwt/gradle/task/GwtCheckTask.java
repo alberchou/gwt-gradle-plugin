@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 
-public class GwtCheckTask extends AbstractTask {
+public abstract class GwtCheckTask extends AbstractTask {
 
 	public static final String NAME = "gwtCheck";
 
@@ -107,9 +107,13 @@ public class GwtCheckTask extends AbstractTask {
 		    getProject().getExtensions().getByType(GwtExtension.class);
 		CompilerOption compilerOptions = extension.getCompile();
 
-		CompileCommand command =
-		    new CompileCommand(getProject(), compilerOptions, getSrc(), null,
-		                       getModules());
+		CompileCommand command = getObjects().newInstance(
+				CompileCommand.class,
+				getProject(),
+				compilerOptions,
+				getSrc(),
+				null,
+				getModules());
 
 		command.addArg("-validateOnly");
 		command.execute();

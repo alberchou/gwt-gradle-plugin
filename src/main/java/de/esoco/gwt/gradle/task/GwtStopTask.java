@@ -22,7 +22,7 @@ import java.net.Socket;
 
 import org.gradle.api.tasks.TaskAction;
 
-public class GwtStopTask extends AbstractTask {
+public abstract class GwtStopTask extends AbstractTask {
 
 	public static final String NAME = "gwtStop";
 

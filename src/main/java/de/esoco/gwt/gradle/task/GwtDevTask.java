@@ -45,7 +45,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 
 
-public class GwtDevTask extends AbstractTask {
+public abstract class GwtDevTask extends AbstractTask {
 
 	public static final String NAME = "gwtDev";
 
@@ -174,9 +174,11 @@ public class GwtDevTask extends AbstractTask {
 		GwtExtension extension =
 		    getProject().getExtensions().getByType(GwtExtension.class);
 
-		JettyServerCommand command =
-		    new JettyServerCommand(getProject(), extension.getJetty(),
-		                           jettyConf);
+		JettyServerCommand command = getObjects().newInstance(
+				JettyServerCommand.class,
+				getProject(),
+				extension.getJetty(),
+				jettyConf);
 
 		command.execute();
 		return command;
@@ -194,8 +196,11 @@ public class GwtDevTask extends AbstractTask {
 			devOption.setSourceLevel(extension.getSourceLevel());
 		}
 
-		AbstractCommand command =
-		    new CodeServerCommand(getProject(), extension, getModules());
+		AbstractCommand command = getObjects().newInstance(
+				CodeServerCommand.class,
+				getProject(),
+				extension,
+				getModules());
 
 		FutureTask<?> sdmTask = new FutureTask<>(() -> command.execute(), null);
 

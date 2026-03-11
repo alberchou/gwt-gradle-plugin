@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-public class GwtSetUpTask extends AbstractTask {
+public abstract class GwtSetUpTask extends AbstractTask {
 
 	public static final String NAME = "gwtSetUp";
 

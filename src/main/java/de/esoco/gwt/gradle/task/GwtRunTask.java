@@ -29,7 +29,7 @@ import java.io.File;
 import java.util.Map;
 
 
-public class GwtRunTask extends AbstractTask {
+public abstract class GwtRunTask extends AbstractTask {
 
 	public static final String NAME = "gwtRun";
 
@@ -64,9 +64,11 @@ public class GwtRunTask extends AbstractTask {
 		GwtExtension extension =
 		    getProject().getExtensions().getByType(GwtExtension.class);
 
-		JettyServerCommand command =
-		    new JettyServerCommand(getProject(), extension.getJetty(),
-		                           jettyConf);
+		JettyServerCommand command = getObjects().newInstance(
+				JettyServerCommand.class,
+				getProject(),
+				extension.getJetty(),
+				jettyConf);
 
 		command.execute();
 	}

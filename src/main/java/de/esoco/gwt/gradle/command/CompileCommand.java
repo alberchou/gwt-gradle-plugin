@@ -22,7 +22,9 @@ import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.plugins.JavaPlugin;
+import org.gradle.process.ExecOperations;
 
+import javax.inject.Inject;
 import java.io.File;
 
 import java.util.Collection;
@@ -30,11 +32,12 @@ import java.util.Collection;
 
 public class CompileCommand extends AbstractCommand {
 
+	@Inject
 	public CompileCommand(Project project, CompilerOption compilerOptions,
 	                      FileCollection sources, File war,
-	                      Collection<String> modules) {
+	                      Collection<String> modules, ExecOperations execOperations) {
 
-		super(project, "com.google.gwt.dev.Compiler");
+		super(project, "com.google.gwt.dev.Compiler", execOperations);
 
 		configure(project, compilerOptions, sources, war, modules);
 	}

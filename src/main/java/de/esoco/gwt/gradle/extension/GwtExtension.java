@@ -18,9 +18,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.gradle.util.ConfigureUtil;
+import org.gradle.api.Action;
+import org.gradle.api.model.ObjectFactory;
 
-import groovy.lang.Closure;
+import javax.inject.Inject;
 
 public class GwtExtension {
 	
@@ -42,9 +43,16 @@ public class GwtExtension {
 	 */
 	private final List<String> module = new ArrayList<>();
 
-	private CompilerOption compile = new CompilerOption();
-	private DevOption dev = new DevOption();
-	private JettyOption jetty = new JettyOption();
+	private CompilerOption compile;
+	private DevOption dev;
+	private JettyOption jetty;
+
+	@Inject
+	public GwtExtension(ObjectFactory objects) {
+		this.compile = objects.newInstance(CompilerOption.class);
+		this.dev = objects.newInstance(DevOption.class);
+		this.jetty = objects.newInstance(JettyOption.class);
+	}
 
 	public String getGwtVersion() {
 		return gwtVersion;
@@ -90,39 +98,24 @@ public class GwtExtension {
 		return dev;
 	}
 
-	public void setDev(DevOption dev) {
-		this.dev = dev;
-	}
-
-	public GwtExtension dev(Closure<DevOption> c) {
-		ConfigureUtil.configure(c, dev);
-		return this;
+	public void dev(Action<? super DevOption> action) {
+		action.execute(dev);
 	}
 
 	public CompilerOption getCompile() {
 		return compile;
 	}
 
-	public void setCompile(CompilerOption compile) {
-		this.compile = compile;
-	}
-
-	public GwtExtension compile(Closure<CompilerOption> c) {
-		ConfigureUtil.configure(c, compile);
-		return this;
+	public void compile(Action<? super CompilerOption> action) {
+		action.execute(compile);
 	}
 
 	public JettyOption getJetty() {
 		return jetty;
 	}
 
-	public void setJetty(JettyOption jetty) {
-		this.jetty = jetty;
-	}
-
-	public GwtExtension jetty(Closure<JettyOption> c) {
-		ConfigureUtil.configure(c, jetty);
-		return this;
+	public void jetty(Action<? super JettyOption> action) {
+		action.execute(jetty);
 	}
 
 	public String getSourceLevel() {
